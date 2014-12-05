@@ -1,0 +1,29 @@
+{
+  "name": "Blog",
+  "version": "1.0.0",
+  "description": "first blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "luzhen",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^1.0.0",
+    "eventproxy": "^0.3.1",
+    "express": "^4.10.2",
+    "express-session": "^1.9.1",
+    "formidable": "^1.0.15",
+    "markdown-js": "0.0.3",
+    "moment": "^2.8.4",
+    "mysql": "^2.5.3",
+    "qn": "^1.0.1",
+    "to-markdown": "0.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  }
+}

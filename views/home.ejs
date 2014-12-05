@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>blog</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/blog.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+</head>
+
+<body>
+
+<% include nav%>
+
+<div class="container">
+
+    <div class="blog-header">
+      <!--  <% if(locals['user']){%>
+        <h1 class="blog-title">Just go</h1>
+        <p class="lead blog-description">改变从这里开始</p>
+        <%}%>-->
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-8 blog-main">
+            <div class="blog-post">
+                <% articles.forEach(function(article){%>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span> by <a href="/<%=article.author%>/home"><%=article.author%></a></span><div style="float: right"><%=article.create_time%></div></div>
+                    <div class="panel-body">
+
+                        <h3><p style="color: #428bca"><%=article.title%></p></h3>
+                        <div><%-article.content%></div>
+
+                        <div style="padding-top: 20px;text-align: right;"><div style="float: left"><a href="/<%=article.author%>/article/detail/<%=article.id%>" class="btn btn-primary">阅读更多</a></div><%if(user&&user.user_name===article.author){%><a href="/article/edit/<%=article.id%>"> 编辑</a>|<%}%>阅读 <span class="badge"><%=article.visit_num%></span>|<a href="/<%=article.author%>/article/detail/<%=article.id%>#replyId"> 评论</a> <span class="badge"><%=article.reply_num%></span></div>
+                    </div> </div>
+                <%})%>
+            </div>
+
+
+            <nav>
+                <ul class="pager">
+                    <li><a href="<%=prePaginationUrl%>">Previous</a></li>
+                    <li><a href="<%=nextPaginationUrl%>">Next</a></li>
+                </ul>
+            </nav>
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar" >
+
+            <div class="sidebar-module sidebar-module-inset">
+                <h4></h4>
+                <img src="<%=userInfo.portrait_url%>" style="height: 60px;width: 60px" class="img-rounded"/>
+                <p><%=userInfo.signature!=''?userInfo.signature:'作者很懒，什么也没留下。'%></p>
+            </div>
+
+            <div class="sidebar-module">
+
+                <h4>文章分类</h4>
+                <ol class="list-unstyled">
+                      <% categories.forEach(function(category){%>
+                        <li><a href='/<%=userInfo.user_name%>/category/<%=category.id%>'><%=category.name%></a>(<%=category.article_num%>)</li>
+                      <%})%>
+                </ol>
+            </div>
+            <div class="sidebar-module">
+                <h4>文章归档</h4>
+                <ol class="list-unstyled">
+                    <% archive.forEach(function(item){%>
+                        <li><a href=<%='/'+userInfo.user_name%>/archive/<%-item.date%>><%=item.date%></a>     (<%=item.num%>)</li>
+                    <%})%>
+                </ol>
+            </div>
+            <div class="sidebar-module">
+                <h4>友情链接</h4>
+                <ol class="list-unstyled">
+                    <%friendLinks.forEach(function(friendLink){%>
+                    <li><a href="<%=friendLink.url%>" target="_blank"><%=friendLink.describe%></a></li>
+                    <%})%>
+                </ol>
+            </div>
+        </div><!-- /.blog-sidebar -->
+
+    </div><!-- /.row -->
+
+</div><!-- /.container -->
+
+<% include footer%>
+
+</body>
+</html>

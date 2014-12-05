@@ -1,0 +1,22 @@
+<div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+            <% if(locals['user']){%>
+            <a class="blog-nav-item" href="/<%=user.user_name%>/home">主页</a>
+            <%}%>
+            <a class="blog-nav-item" href="/">广场</a>
+
+
+            <a class="blog-nav-item" href="#">关于</a>
+            <% if(!locals['user']){%>
+            <a class="blog-nav-item navbar-right" href="/register">注册</a>
+            <a class="blog-nav-item navbar-right" href="/login">登入</a>
+            <%}else{%>
+            <a class="blog-nav-item navbar-right" href="/logout">登出</a>
+            <a class="blog-nav-item navbar-right" href="/post">写新文章</a>
+            <a class="blog-nav-item navbar-right" href="/pSettings">个人设置</a>
+            <a class="blog-nav-item navbar-right" href="/bSettings">博客管理</a>
+            <%}%>
+        </nav>
+    </div>
+</div>

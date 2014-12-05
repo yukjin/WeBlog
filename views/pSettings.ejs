@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>blog</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/blog.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/signin.css" rel="stylesheet">
+    <link href="/css/uploadify.css" rel="stylesheet">
+
+</head>
+
+<body>
+<%= include nav%>
+<div class="container"><br/><br/><br/></div>
+<div class="container">
+    <% if(locals['error']){ %>
+    <div class="alert alert-danger" role='alert'>
+        <%= error %>
+    </div>
+    <% } %>
+        <div class="input-group" style="margin-left:auto;margin-right:auto; " >
+            <img src="<%=user.portrait_url%>" style="height: 60px;width: 60px;" class="img-circle" id="headImg"/>
+        </div>
+        <div class="input-group" style="margin-left:auto;margin-right:auto; " >
+                <input class="form-control" type="file" name="headImg" id="headImgFile">
+        </div>
+
+    <form class="form-signin" action="/infoSettings" method="post">
+        <input type="text" class="form-control" placeholder="个性签名" name="signature" value="<%=user.signature%>">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">更改</button>
+    </form>
+</div> <!-- /container -->
+
+
+
+</body>
+<script src="/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery.uploadify.min.js"></script>
+<script>
+    $(function () {
+        $('#headImgFile').uploadify({
+            'fileSizeLimit' : '300KB',
+            'buttonText' : '本地上传',
+            'swf'      : 'uploadify.swf',
+            'uploader' : '/headSettings',
+            'fileTypeExts' : '*.jpg; *.png',
+            'onUploadSuccess' : function(file, data, response) {
+              $('#headImg').attr('src',data);
+            }
+        });
+    })
+
+</script>
+
+</html>

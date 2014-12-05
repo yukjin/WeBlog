@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>blog</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/blog.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/signin.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<%= include nav%>
+<div class="container">
+
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#articles">文章管理</a></li>
+        <li><a href="#categories">分类管理</a></li>
+        <li><a href="#friendlinks">友链管理</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="alert alert-danger" role='alert' style="display: none" id="artErrTip">
+
+        </div>
+        <div class="tab-pane active" id="articles">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>标题</th>
+                    <th>阅读</th>
+                    <th>评论</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%articles.forEach(function(article){%>
+                <tr>
+                    <td><%=article.title%></td>
+                    <td><%=article.visit_num%></td>
+                    <td><%=article.reply_num%></td>
+                    <td><a href="/article/edit/<%=article.id%>">编辑</a>｜<a href="/article/delete/<%=article.id%>" class="artDel" onclick="return false;">删除</a></td>
+                </tr>
+                <%})%>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="categories">
+            <div class="alert alert-danger" role='alert' style="display: none" id="catErrTip">
+
+            </div>
+            <div class="bs-example">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>分类名称</th>
+                        <th>文章</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="catTbodyId">
+                    <%categories.forEach(function(category){%>
+                    <tr>
+                        <td class="editable"><%=category.name%></td>
+                        <td><%=category.article_num%></td>
+                        <td><a class="catEdit" href="/category/edit/<%=category.id%>/" onclick="return false;">编辑</a>｜<a href="/category/delete/<%=category.id%>/" class="catDel" onclick="return false;">删除</a></td>
+                    </tr>
+                    <%})%>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                          <span class="input-group-btn">
+                          <button class="btn btn-default" type="button" id="catBtn">添加</button>
+                          </span>
+                        <input type="text" class="form-control" placeholder="文章类别" name="category_name" required autofocus id="txtCategory">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="friendlinks">
+            <div class="alert alert-danger" role='alert' style="display: none" id="friErrTip">
+
+            </div>
+            <div class="bs-example">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>链接名称</th>
+                        <th>链接地址</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="friTbodyId">
+                        <%friendLinks.forEach(function(friendLink){%>
+                        <tr>
+                            <td><%=friendLink.describe%></td>
+                            <td><%=friendLink.url%></td>
+                            <td><a href="/friendLinks/delete/<%=friendLink.id%>/" class="friDel" onclick="return false;">删除</a></td>
+                        </tr>
+                        <%})%>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control" placeholder="链接名称" name="describe" required autofocus id="txtDescribe">
+                        <input type="text" class="form-control" placeholder="链接地址" name="url" required autofocus id="txtUrl">
+                          <button class="btn btn-default" type="button" id="linkBtn">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div> <!-- /container -->
+
+
+
+</body>
+<script src="/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $('#myTab a:first').tab('show');//初始化显示哪个tab
+
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        })
+
+        $('.artDel').click(function(){
+            if(!confirm('真的要删除？')){
+                return;
+            }
+            var that=this;
+            $.ajax({
+                type: 'GET',
+                url: this+"",
+                data: {},
+                success: function (data) {
+                    if(data.error){
+                        $('#catErrTip').text(data.error);
+                        $('#catErrTip').css('display','block');
+                    }else{
+                        $('#catErrTip').text('');
+                        $('#catErrTip').css('display','none');
+                        $(that).parent().parent().remove();
+                    }
+                },
+                dataType: 'json'
+            });
+        });
+        function catDelHandler(){
+            if(!confirm('真的要删除？')){
+                return;
+            }
+            var that=this;
+            $.ajax({
+                type: 'GET',
+                url: this+"",
+                data: {},
+                success: function (data) {
+                    if(data.error){
+                        $('#catErrTip').text(data.error);
+                        $('#catErrTip').css('display','block');
+                    }else{
+                        $('#catErrTip').text('');
+                        $('#catErrTip').css('display','none');
+                        $(that).parent().parent().remove();
+                    }
+
+                },
+                dataType: 'json'
+            });
+        }
+        $('.catDel').on('click',catDelHandler);
+        function catEditHandler(){
+            var editable=$(this).parent().parent().children('.editable');
+            var input=$('<input type="text" value="'+editable.text()+'">');
+            var save=$('<a href="'+this+'" onclick="return false">保存</a>');
+            editable.html('');
+            editable.append(input);
+            editable.append(save);
+            save.click(function(){
+                var that=this;
+                $.ajax({
+                    type: 'POST',
+                    url: this+"",
+                    data: {'name':input.val()},
+                    success: function (data) {
+                        if(data.error){
+                            $('#catErrTip').text(data.error);
+                            $('#catErrTip').css('display','block');
+                        }else{
+                            $('#catErrTip').text('');
+                            $('#catErrTip').css('display','none');
+                            editable.html(data.name);
+                            $('.catEdit').one('click',catEditHandler);
+                        }
+
+                    },
+                    dataType: 'json'
+                });
+            });
+        }
+        $('.catEdit').one('click',catEditHandler);
+
+        $('#catBtn').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: '/category/add/',
+                data: {'category_name':$('#txtCategory').val()},
+                success: function (data) {
+                    if(data.error){
+                        $('#catErrTip').text(data.error);
+                        $('#catErrTip').css('display','block');
+                    }else{
+                        $('#catErrTip').text('');
+                        $('#catErrTip').css('display','none');
+                        var edit=$('<a class="catEdit" href="/category/edit/'+data.id+'/" onclick="return false;">编辑</a>');
+                        var del=$("<a href='/category/delete/"+data.id+"/' class='catDel' onclick='return false;'>删除</a>");
+                        $('#catTbodyId').append($('<tr></tr>').append('<td class="editable">'+data.name+'</td>').append('<td>'+data.article_num+'</td>').append($('<td></td>').append(edit).append('｜').append(del)));
+
+                        edit.one('click',catEditHandler);
+                        del.on('click',catDelHandler);
+                    }
+                },
+                dataType: 'json'
+            });
+        });
+
+        function friDelHandler(){
+            if(!confirm('真的要删除？')){
+                return;
+            }
+            var that=this;
+            $.ajax({
+                type: 'GET',
+                url: this+"",
+                data: {},
+                success: function (data) {
+                    if(data.error){
+                        $('#friErrTip').text(data.error);
+                        $('#friErrTip').css('display','block');
+                    }else{
+                        $('#friErrTip').text('');
+                        $('#friErrTip').css('display','none');
+                        $(that).parent().parent().remove();
+                    }
+
+                },
+                dataType: 'json'
+            });
+        }
+        $('.friDel').on('click',friDelHandler);
+        $('#linkBtn').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/friendLinks/add/',
+                data: {'describe':$('#txtDescribe').val(),'url':$('#txtUrl').val()},
+                success: function (data) {
+                    if(data.error){
+                        $('#friErrTip').text(data.error);
+                        $('#friErrTip').css('display','block');
+                    }else{
+                        $('#friErrTip').text('');
+                        $('#friErrTip').css('display','none');
+                        var del=$("<a href='/category/delete/"+data.id+"/' class='catDel' onclick='return false;'>删除</a>");
+                        $('#friTbodyId').append($("<tr></tr>").append("<td>"+data.describe+"</td><td>"+data.url+"</td>").append($('<td></td>').append(del)));
+                        del.on('click',friDelHandler);
+                    }
+                },
+                dataType: 'json'
+            });
+        });
+    })
+</script>
+</html>
