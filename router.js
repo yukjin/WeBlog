@@ -23,7 +23,7 @@ var router = express.Router();
     router.post('/uploadImg',filter.checkLogin);
     router.get('/pSettings',filter.checkLogin);
     router.get('/bSettings',filter.checkLogin);
-    //router.post('/headSettings',filter.checkLogin);
+    router.post('/headSettings',filter.checkLogin);
     router.post('/infoSettings',filter.checkLogin);
     router.get('/article/edit/:articleId/',filter.checkLogin);
     router.post('/article/edit/:articleId/',filter.checkLogin);
@@ -46,7 +46,8 @@ var router = express.Router();
     router.get('/:username/home',site.home);
     router.get('/archive/:date/',site.queryArticlesByIndexArchive);
     router.get('/:username/archive/:date',site.queryArticlesByHomeArchive);
-    router.get('/:username/article/detail/:articleId',site.queryArticleDetail);
+    router.get('/article/detail/:articleId',site.queryArticleDetail);
+    router.get('/article/detail/:articleId/:messageId',site.queryArticleDetailFromMessage);
     router.get('/:username/category/:categoryId/',site.queryArticlesByHomeCategory);
     router.post('/:username/:articleId/reply',reply.addReply);
 
@@ -78,4 +79,6 @@ var router = express.Router();
     router.get('/friendLinks/delete/:friendLinkId/',bSettings.deleteFriendLink);
     router.get('/category/delete/:categoryId/',bSettings.deleteCategory);
     router.post('/category/edit/:categoryId/',bSettings.editCategory);
+
+    router.get('/myMessage',site.showMessage);
 module.exports=router;

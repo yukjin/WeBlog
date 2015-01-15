@@ -4,6 +4,8 @@
 var Reply=require('../lib/Reply');
 var eventproxy=require('eventproxy');
 var markdown=require('markdown-js');
+var at=require('../lib/at');
+
 
 function addReply(req,res,next) {
     var articleId=req.params.articleId||'';
@@ -24,7 +26,7 @@ function addReply(req,res,next) {
         ep.emit('reply_error', '内容不能为空或评论的文章不存在!');
         return;
     }
-
+    content=at.linkUsers(content);//转换@用户名 为markdown链接形式
     var newReply=new Reply({'content':markdown.parse(content),'articleId':articleId,'replyer_id':replyer_id});
 
     newReply.addReply(function(err,result){
@@ -32,7 +34,13 @@ function addReply(req,res,next) {
             ep.emit('reply_error',err);
             return;
         }else{
-            res.redirect('/'+author+'/article/detail/'+articleId);
+            at.sendMessageToMentionUsers(newReply.content,articleId,replyer_id, function (err) {
+                if(err){
+                    next(err);
+                }
+            });//给at到的人发消息
+
+            res.redirect('/article/detail/'+articleId);
         }
     });
 }

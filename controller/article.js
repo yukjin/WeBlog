@@ -79,8 +79,9 @@ exports.post=function(req,res,next){
     var author=req.session.user.user_name;
     var ep=eventproxy();
     ep.on('post_err',function(tip){
-        req.flash('error',tip);
-        res.redirect('/post');
+//        req.flash('error',tip);
+//        res.redirect('/post');
+        res.send({'error':tip});
     });
     if ([categoryId,title,content].some(function (item) { return item === ''; })) {
         ep.emit('post_err', '文章的分类、标题或内容没有填写!');
@@ -98,6 +99,6 @@ exports.post=function(req,res,next){
             ep.emit('post_err', '文章发表失败！');
             return;
         }
-        return  res.redirect('/'+req.session.user.user_name+'/home');
+        return  res.send({'success':"true"});
     });
 }

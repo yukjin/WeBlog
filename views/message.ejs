@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>blog</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/blog.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/signin.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<%= include nav%>
+<div class="container">
+    <div class="panel panel-info">
+        <div class="panel-heading">未读消息</div>
+        <div class="panel-body">
+
+            <%unReadMessages.forEach(function (message) {%>
+                    <a href="/<%=message.user_name%>/home"><%=message.user_name%></a>在话题<a href="/article/detail/<%=message.article_id%>/<%=message.id%>"><%=message.title%></a>
+                    中@了你
+                    <hr/>
+             <%})%>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">已读消息</div>
+        <div class="panel-body">
+            <%if(readedMessages&&readedMessages.length>0){%>
+            <%readedMessages.forEach(function (message) {%>
+            <a href="/<%=message.user_name%>/home"><%=message.user_name%></a>在话题<a href="/article/detail/<%=message.article_id%>"><%=message.title%></a>
+            中@了你
+            <hr/>
+            <%})%>
+            <%}else{%>
+            无消息
+            <%}%>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+</body>
+</html>

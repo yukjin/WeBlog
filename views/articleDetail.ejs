@@ -37,7 +37,7 @@
                 <h5 class="blog-post-title" style="text-align: center"><%=article.title%></h5>
                 <p class="blog-post-meta"><%=article.create_time%> by <a href="/<%=article.author%>/home"><%=article.author%></a></p>
                 <div> <%-article.content%></div>
-                <div style="padding-top: 20px;text-align: right;">阅读 <span class="badge"><%=article.visit_num%></span>|<a href="#replyId"> 评论</a>  <span class="badge"><%=article.reply_num%></span></div>
+                <div style="padding-top: 20px;text-align: right;"><%if(user&&user.user_name===article.author){%><a href="/article/edit/<%=article.id%>"> 编辑</a>|<%}%>阅读 <span class="badge"><%=article.visit_num%></span>|<a href="#replyId"> 评论</a>  <span class="badge"><%=article.reply_num%></span></div>
             </div>
 
         </div><!-- /.blog-main -->

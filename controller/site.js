@@ -6,6 +6,7 @@ var BlogUtil=require('../lib/BlogUtil');
 var User=require('../lib/User');
 var Post=require('../lib/Post');
 var reply=require('../lib/Reply');
+var Message=require('../lib/Message');
 
 function index(req,res,next){//广场
     var ep=new eventProxy();
@@ -110,9 +111,19 @@ function queryArticlesByHomeArchive(req,res,next){
     });
 }
 
+function queryArticleDetailFromMessage(req,res,next) {
+    var messageId=req.params.messageId||'';
+    Message.updateMessageStatus(messageId,function(err,result){
+       if(err){
+           next(err);
+       }else{
+           queryArticleDetail(req,res,next);
+       }
+    });
+}
 function queryArticleDetail(req,res,next){
     var articleId=req.params.articleId;
-    var author=req.params.username;
+
     var ep=eventProxy();
     ep.all('getArticle','getReply',function(article,replies){
         res.render('articleDetail',{'article':article,'replies':replies});
@@ -124,7 +135,7 @@ function queryArticleDetail(req,res,next){
             res.redirect('/errPage');
         }
     });
-    Post.queryDetail({id:articleId,'author':author},function(err,result){
+    Post.queryDetail({id:articleId},function(err,result){
         if(err){
             req.flash('error',err);
             res.redirect('/errPage');
@@ -168,12 +179,37 @@ function queryArticlesByHomeCategory(req,res,next){
         ep.emit('getFriendLinks',result);
     });
 }
+
+function showMessage(req,res,next) {
+    var user=req.session.user||'';
+    var ep = new eventProxy();
+    ep.all('unRead','readed', function (unReadMessages,readedMessages) {
+        res.render('message',{'unReadMessages':unReadMessages,'readedMessages':readedMessages});
+    });
+    Message.getUnReadMessage(user.id,function (err,messages) {
+        if(err){
+            next(err);
+        }else{
+            ep.emit('unRead',messages);
+        }
+    });
+    Message.getReadedMessage(user.id,function (err,messages) {
+        if(err){
+            next(err);
+        }else{
+            ep.emit('readed',messages);
+        }
+    });
+
+}
 exports.index=index;
 exports.home=home;
 exports.queryArticlesByIndexArchive=queryArticlesByIndexArchive;
 exports.queryArticlesByHomeArchive=queryArticlesByHomeArchive;
 exports.queryArticleDetail=queryArticleDetail;
+exports.queryArticleDetailFromMessage=queryArticleDetailFromMessage;
 exports.bSettings=bSettings;
 exports.pSettings=pSettings;
 exports.queryArticlesByHomeCategory=queryArticlesByHomeCategory;
+exports.showMessage=showMessage;
 

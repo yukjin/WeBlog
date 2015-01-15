@@ -16,6 +16,11 @@
             <a class="blog-nav-item navbar-right" href="/post">写新文章</a>
             <a class="blog-nav-item navbar-right" href="/pSettings">个人设置</a>
             <a class="blog-nav-item navbar-right" href="/bSettings">博客管理</a>
+                 <%if(messageNum&&messageNum>0){%>
+                <a class="blog-nav-item navbar-right " href="/myMessage">未读消息<span class="badge" style="background-color: lightgreen"><%=messageNum%></span></a>
+                <%}else{%>
+                <a class="blog-nav-item navbar-right " href="/myMessage">未读消息</a>
+                <%}%>
             <%}%>
         </nav>
     </div>

@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.9.2",
+    "connect-busboy": "0.0.2",
     "connect-flash": "^0.1.1",
     "ejs": "^1.0.0",
     "eventproxy": "^0.3.1",
